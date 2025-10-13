@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
     public Vector3 speed;
     public Vector3 lateralSpeed = new Vector3(5,0,0); // lateral speed
     public GameObject projectile;
-    private float[] xPosProjectileSpawn = {-0.5f, 0.5f};
+    private float xPosProjectileSpawn = 0.5f;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -41,7 +41,8 @@ public class PlayerController : MonoBehaviour
 
     void ShootProjectile()
     {
-        Vector3 xPos = Vector3.right * xPosProjectileSpawn[Random.Range(0, 2)];
-        Instantiate(projectile, transform.position + xPos, projectile.transform.rotation);
+        if (xPosProjectileSpawn == 0.5f) xPosProjectileSpawn--;
+        else xPosProjectileSpawn++;
+        Instantiate(projectile, transform.position + Vector3.right * xPosProjectileSpawn, projectile.transform.rotation);
     }
 }
