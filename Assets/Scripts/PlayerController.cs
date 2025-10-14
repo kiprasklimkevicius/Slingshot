@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -7,6 +8,7 @@ public class PlayerController : MonoBehaviour
     public Vector3 lateralSpeed = new Vector3(5,0,0); // lateral speed
     public GameObject projectile;
     private float xPosProjectileSpawn = 0.5f;
+    public float powerupSpeed = 3;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -44,5 +46,21 @@ public class PlayerController : MonoBehaviour
         if (xPosProjectileSpawn == 0.5f) xPosProjectileSpawn--;
         else xPosProjectileSpawn++;
         Instantiate(projectile, transform.position + Vector3.right * xPosProjectileSpawn, projectile.transform.rotation);
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("Trigger entered");
+        if (other.gameObject.CompareTag("SpeedUp"))
+        {
+            Destroy(other.gameObject);
+            //gain speed
+            speed += new Vector3(0, powerupSpeed, 0);
+        }
     }
 }
