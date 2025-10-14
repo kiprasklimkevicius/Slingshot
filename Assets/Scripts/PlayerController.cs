@@ -10,18 +10,24 @@ public class PlayerController : MonoBehaviour
     private float xPosProjectileSpawn = 0.5f;
     public float powerupSpeed = 3;
     public float blackHoleMass = 20;
+    private Rigidbody rigidBody;
+    public float gravityConstant = 0.1f;
+    public bool gameOver;
+    private GameManager gameManager;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         // Vector3.up is moving forward, because capsule is rotated 90 around x-axis;
         speed = new Vector3(0, initSpeed, 0);
-
+        rigidBody = GetComponent<Rigidbody>();
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (gameOver) return;
         LateralMovement();
         transform.Translate(speed * Time.deltaTime);
         if (Input.GetKeyDown(KeyCode.Space))
@@ -51,7 +57,13 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        
+        Debug.Log("collision");
+        if (other.gameObject.CompareTag("Deadly"))
+        {
+            Debug.Log("Shoula gameoverd");
+            gameOver = true;
+            gameManager.ShowGameOverText();
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -74,24 +86,17 @@ public class PlayerController : MonoBehaviour
 
     void GravityPull(GameObject gravity)
     {
-        float massOfObject = GetObjectMass(gravity);
-        Debug.Log("Mass of hole: " + massOfObject);
-        // TODO: Direction Vector
-        Vector3 directionToObject = (gravity.transform.position - transform.position);
-        float distance = directionToObject.magnitude;
+        Vector3 vectorToObject = (gravity.transform.position - transform.position);
+        float distance = vectorToObject.magnitude;
         
-        // TODO: add Direction pullVector to the speed (this happens overtime)
-        //linear speed addition, this is a dumbed down version of what actually happens
+        float forceIntensity = gravityConstant * GetObjectMass(gravity) / (distance);
         //mass Of Object allows me to control the pull through the rigidbody of gameObject that pulls it closer
-        Vector3 pullVector = directionToObject.normalized * massOfObject * Time.deltaTime * (3/(distance*distance));
+        Vector3 forceToApply = vectorToObject.normalized * forceIntensity;
         // Vector3 pullVector = directionToObject.normalized * massOfObject * Time.deltaTime;
         //Object is rotated 90 degrees along x axis making y its forward direction
-        Debug.Log("PullVector");
-        Debug.Log(pullVector);
-        pullVector.y = pullVector.z;
-        pullVector.x *= 1.5f;
-        pullVector.z = 0;
-        speed += pullVector;
+        forceToApply = new Vector3(forceToApply.x, forceToApply.z, forceToApply.y);
+        speed += forceToApply * Time.deltaTime;
+        Debug.Log("ForceApplied: " + forceToApply);
     }
     
     float GetObjectMass(GameObject obj)
