@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     public GameObject projectile;
     private float xPosProjectileSpawn = 0.5f;
     public float powerupSpeed = 3;
+    public float blackHoleMass = 20;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -82,8 +83,8 @@ public class PlayerController : MonoBehaviour
         // TODO: add Direction pullVector to the speed (this happens overtime)
         //linear speed addition, this is a dumbed down version of what actually happens
         //mass Of Object allows me to control the pull through the rigidbody of gameObject that pulls it closer
-        // Vector3 pullVector = directionToObject.normalized * massOfObject * Time.deltaTime * (1/(distance*distance));
-        Vector3 pullVector = directionToObject.normalized * massOfObject * Time.deltaTime;
+        Vector3 pullVector = directionToObject.normalized * massOfObject * Time.deltaTime * (3/(distance*distance));
+        // Vector3 pullVector = directionToObject.normalized * massOfObject * Time.deltaTime;
         //Object is rotated 90 degrees along x axis making y its forward direction
         Debug.Log("PullVector");
         Debug.Log(pullVector);
@@ -93,8 +94,10 @@ public class PlayerController : MonoBehaviour
         speed += pullVector;
     }
     
-    float GetObjectMass(GameObject obj){
-        
-        return obj.GetComponentInParent<Rigidbody>().mass;
+    float GetObjectMass(GameObject obj)
+    {
+        Rigidbody rb = obj.GetComponentInParent<Rigidbody>();
+        rb.mass = blackHoleMass;
+        return rb.mass;
     }
 }
