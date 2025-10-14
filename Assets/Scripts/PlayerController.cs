@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     public float gravityConstant = 0.1f;
     public bool gameOver;
     private GameManager gameManager;
+    private AudioSource laserShotAudio;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -22,6 +23,7 @@ public class PlayerController : MonoBehaviour
         rigidBody = GetComponent<Rigidbody>();
         rigidBody.AddForce(new Vector3(0, 0, initSpeed), ForceMode.Impulse);
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        laserShotAudio = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -52,6 +54,7 @@ public class PlayerController : MonoBehaviour
         if (xPosProjectileSpawn == 0.5f) xPosProjectileSpawn--;
         else xPosProjectileSpawn++;
         Instantiate(projectile, transform.position + Vector3.right * xPosProjectileSpawn, projectile.transform.rotation);
+        laserShotAudio.Play();
     }
 
     private void OnCollisionEnter(Collision other)
