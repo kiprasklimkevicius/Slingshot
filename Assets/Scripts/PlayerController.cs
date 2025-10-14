@@ -55,12 +55,46 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Trigger entered");
         if (other.gameObject.CompareTag("SpeedUp"))
         {
             Destroy(other.gameObject);
             //gain speed
             speed += new Vector3(0, powerupSpeed, 0);
         }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Gravity"))
+        {
+            GravityPull(other.gameObject);
+        }
+    }
+
+    void GravityPull(GameObject gravity)
+    {
+        float massOfObject = GetObjectMass(gravity);
+        Debug.Log("Mass of hole: " + massOfObject);
+        // TODO: Direction Vector
+        Vector3 directionToObject = (gravity.transform.position - transform.position);
+        float distance = directionToObject.magnitude;
+        
+        // TODO: add Direction pullVector to the speed (this happens overtime)
+        //linear speed addition, this is a dumbed down version of what actually happens
+        //mass Of Object allows me to control the pull through the rigidbody of gameObject that pulls it closer
+        // Vector3 pullVector = directionToObject.normalized * massOfObject * Time.deltaTime * (1/(distance*distance));
+        Vector3 pullVector = directionToObject.normalized * massOfObject * Time.deltaTime;
+        //Object is rotated 90 degrees along x axis making y its forward direction
+        Debug.Log("PullVector");
+        Debug.Log(pullVector);
+        pullVector.y = pullVector.z;
+        pullVector.x *= 1.5f;
+        pullVector.z = 0;
+        speed += pullVector;
+    }
+    
+    float GetObjectMass(GameObject obj){
+        
+        return obj.GetComponentInParent<Rigidbody>().mass;
     }
 }

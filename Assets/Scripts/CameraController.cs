@@ -21,5 +21,6 @@ public class CameraController : MonoBehaviour
     private void LateUpdate()
     {
         transform.position = player.transform.position + offset;
+        transform.rotation = player.transform.rotation * Quaternion.Euler(-90,0,0);
     }
 }

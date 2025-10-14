@@ -20,6 +20,7 @@ public class AsteroidController : MonoBehaviour
     {
         Debug.Log("innadepowerup");
         Destroy(gameObject);
+        Destroy(other.gameObject);
         Instantiate(powerUp, transform.position, powerUp.transform.rotation);
     }
 
