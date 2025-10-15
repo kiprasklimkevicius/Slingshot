@@ -19,13 +19,11 @@ public class LensEffects : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // converting players speed into lens distortion
         float playerSpeed = player.linearVelocity.z;
-        Debug.Log("player speed: " + playerSpeed);
-        
         float t = playerSpeed / 50;
-        Debug.Log("tvalue: " + t);
         float lensDistortionIntensityValue = Mathf.Lerp(0, -1, t);
-        Debug.Log("Lens Distortion intensity: " + lensDistortionIntensityValue);
+        
         lensDistortion.intensity.value = lensDistortionIntensityValue;
         
     }

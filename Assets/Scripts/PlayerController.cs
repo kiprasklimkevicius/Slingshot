@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     public Vector3 lateralSpeed = new Vector3(5,0,0); // lateral speed
     public GameObject projectile;
     private float xPosProjectileSpawn = 0.5f;
-    public float powerupSpeed = 3;
+    public float powerUpFuel = 30;
     public float blackHoleMass = 20;
     private Rigidbody rigidBody;
     public float gravityConstant = 0.1f;
@@ -16,6 +16,10 @@ public class PlayerController : MonoBehaviour
     private GameManager gameManager;
     private AudioSource laserShotAudio;
     public float xPull = 1.5f;
+    public float fuelGauge;
+    public float fuelDischargeRatePerSecond = 50;
+    public float fuelSpeed = 10;
+    private float timeSpentFueling = 0;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -25,17 +29,20 @@ public class PlayerController : MonoBehaviour
         rigidBody.AddForce(new Vector3(0, 0, initSpeed), ForceMode.Impulse);
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         laserShotAudio = GetComponent<AudioSource>();
+        fuelGauge = Mathf.Clamp(fuelGauge, 0, 100);
+        fuelGauge = 50;
     }
 
     // Update is called once per frame
     void Update()
     {
         if (gameOver) return;
+        
         LateralMovement();
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            ShootProjectile();
-        }
+        
+        if (Input.GetKeyDown(KeyCode.Space)) ShootProjectile();
+
+        if (Input.GetKey(KeyCode.LeftShift)) UseFuel();
     }
 
     void LateralMovement()
@@ -47,6 +54,18 @@ public class PlayerController : MonoBehaviour
         {
             rigidBody.AddForce(-lateralSpeed, ForceMode.Impulse);
         }
+    }
+
+    void UseFuel()
+    {
+        if (fuelGauge > 0)
+        {
+            rigidBody.AddForce(Vector3.forward * fuelSpeed * Time.deltaTime, ForceMode.Force);
+            fuelGauge -= fuelDischargeRatePerSecond * Time.deltaTime;
+            timeSpentFueling += Time.deltaTime;
+            Debug.Log("Time spent using Fuel: " + timeSpentFueling);
+        }
+
     }
     
 
@@ -60,10 +79,8 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        Debug.Log("collision");
         if (other.gameObject.CompareTag("Deadly"))
         {
-            Debug.Log("Shoula gameoverd");
             gameOver = true;
             gameManager.ShowGameOverText();
         }
@@ -75,13 +92,14 @@ public class PlayerController : MonoBehaviour
         {
             Destroy(other.gameObject);
             //gain speed
-            speed += new Vector3(0, powerupSpeed, 0);
+            fuelGauge += powerUpFuel;
         }
         if (other.CompareTag("Gravity"))
         {
             lateralSpeed.x = 2;
         }
     }
+    
 
     private void OnTriggerExit(Collider other)
     {
@@ -108,7 +126,6 @@ public class PlayerController : MonoBehaviour
         Vector3 forceToApply = vectorToObject.normalized * forceIntensity;
         forceToApply.x *= xPull; // Test maybe feels better 
         rigidBody.AddForce(forceToApply * Time.deltaTime, ForceMode.Force);
-        Debug.Log("ForceApplied: " + forceToApply);
     }
     
     float GetObjectMass(GameObject obj)
