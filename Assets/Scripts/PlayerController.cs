@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     public bool gameOver;
     private GameManager gameManager;
     private AudioSource laserShotAudio;
+    public float xPull = 1.5f;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -76,6 +77,18 @@ public class PlayerController : MonoBehaviour
             //gain speed
             speed += new Vector3(0, powerupSpeed, 0);
         }
+        if (other.CompareTag("Gravity"))
+        {
+            lateralSpeed.x = 2;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Gravity"))
+        {
+            lateralSpeed.x = 5;
+        }
     }
 
     private void OnTriggerStay(Collider other)
@@ -93,6 +106,7 @@ public class PlayerController : MonoBehaviour
         
         float forceIntensity = gravityConstant * GetObjectMass(gravity) / (distance);
         Vector3 forceToApply = vectorToObject.normalized * forceIntensity;
+        forceToApply.x *= xPull; // Test maybe feels better 
         rigidBody.AddForce(forceToApply * Time.deltaTime, ForceMode.Force);
         Debug.Log("ForceApplied: " + forceToApply);
     }

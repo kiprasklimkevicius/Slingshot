@@ -8,6 +8,7 @@ TagManager:
   - LaserShot
   - Gravity
   - Deadly
+  - Bouncy Wall
   layers:
   - Default
   - TransparentFX

@@ -10,7 +10,7 @@ public class LaserShot : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         transform.Translate(Vector3.up * speed * Time.deltaTime);
     }
