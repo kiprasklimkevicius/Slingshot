@@ -22,10 +22,10 @@ public class PlayerController : MonoBehaviour
     private float timeSpentFueling = 0;
     private AudioSource laserShotAudio;
     private AudioSource engineOffAudio;
-    private AudioSource engineOnAudio;
-    private AudioSource engineCrashAudio;
     private AudioSource rocketCrashAudio;
     private AudioSource[] sounds;
+    private float speedOnLastFrame;
+    private float timeKeeperForLastFrame;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -44,9 +44,7 @@ public class PlayerController : MonoBehaviour
         // 0, 1, 2... is the order that these audio sources are assigned to the 'Player' Game Object
         laserShotAudio = sounds[0];
         engineOffAudio = sounds[1];
-        engineOnAudio = sounds[2];
-        engineCrashAudio = sounds[3];
-        rocketCrashAudio = sounds[4];
+        rocketCrashAudio = sounds[2];
     }
 
     // Update is called once per frame
@@ -59,12 +57,22 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space)) ShootProjectile();
         
         
-        if (Input.GetKeyDown(KeyCode.LeftShift)) SwitchToEngineOnAudio();
         if (Input.GetKeyUp(KeyCode.LeftShift)) SwitchToEngineOffAudio();
         if (Input.GetKey(KeyCode.LeftShift)) UseFuel();
 
         if (rigidBody.linearVelocity.z > topSpeed) topSpeed = rigidBody.linearVelocity.z;
 
+    }
+
+    private void LateUpdate()
+    {
+        timeKeeperForLastFrame += Time.deltaTime;
+        if (timeKeeperForLastFrame >= 0.1f)
+        {
+            timeKeeperForLastFrame = 0;
+            speedOnLastFrame = rigidBody.linearVelocity.z;
+        }
+        
     }
 
     void LateralMovement()
@@ -85,8 +93,9 @@ public class PlayerController : MonoBehaviour
             rigidBody.AddForce(Vector3.forward * fuelSpeed * Time.deltaTime, ForceMode.Force);
             engineOffAudio.pitch += 0.5f * Time.deltaTime;
             fuelGauge -= fuelDischargeRatePerSecond * Time.deltaTime;
-            timeSpentFueling += Time.deltaTime;
-        }
+            // TODO: maybe delete but could be cool to see the stats
+            //  timeSpentFueling += Time.deltaTime;
+        } else engineOffAudio.pitch = 1;
 
     }
     
@@ -156,18 +165,10 @@ public class PlayerController : MonoBehaviour
         rb.mass = blackHoleMass;
         return rb.mass;
     }
-    
-    void SwitchToEngineOnAudio()
-    {
-        //engineOffAudio.pitch = 1.5f;
-        // engineOnAudio.Play();
-    }
 
     void SwitchToEngineOffAudio()
     {
         engineOffAudio.pitch = 1;
-        // engineOnAudio.Pause();
-        // engineOffAudio.Play();
     }
 
     void GameOver()
@@ -175,7 +176,7 @@ public class PlayerController : MonoBehaviour
         engineOffAudio.pitch = 0.8f;
         rocketCrashAudio.Play();
         gameOver = true;
-        gameManager.ShowGameOverText();
+        gameManager.ShowGameOverText(Mathf.Floor(speedOnLastFrame));
     }
 
     void WinGameOver()

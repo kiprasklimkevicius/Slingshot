@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
     public GameObject victoryTexts;
     public TextMeshProUGUI victorySpeedText;
     public TextMeshProUGUI gameOverText;
+
+    public TextMeshProUGUI speedOnImpactText;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -43,8 +45,9 @@ public class GameManager : MonoBehaviour
         speedText.text = "Speedometer: " + pSpeed;
     }
 
-    public void ShowGameOverText()
+    public void ShowGameOverText(float speedOnImpact)
     {
+        speedOnImpactText.text = "Your Speed on Impact: " +speedOnImpact;
         gameOverText.gameObject.SetActive(true);
     }
 
