@@ -4,9 +4,9 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float initSpeed = 10;
-    public Vector3 speed;
     public Vector3 lateralSpeed = new Vector3(5,0,0); // lateral speed
     public float lateralSpeedInGravityField = 4;
+    public float topSpeed;
     public GameObject projectile;
     private float xPosProjectileSpawn = 0.5f;
     public float powerUpFuel = 30;
@@ -37,6 +37,8 @@ public class PlayerController : MonoBehaviour
         laserShotAudio = GetComponent<AudioSource>();
         fuelGauge = Mathf.Clamp(fuelGauge, 0, 100);
         fuelGauge = 50;
+
+        topSpeed = 0;
         
         sounds = GetComponents<AudioSource>();
         // 0, 1, 2... is the order that these audio sources are assigned to the 'Player' Game Object
@@ -60,6 +62,9 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftShift)) SwitchToEngineOnAudio();
         if (Input.GetKeyUp(KeyCode.LeftShift)) SwitchToEngineOffAudio();
         if (Input.GetKey(KeyCode.LeftShift)) UseFuel();
+
+        if (rigidBody.linearVelocity.z > topSpeed) topSpeed = rigidBody.linearVelocity.z;
+
     }
 
     void LateralMovement()
@@ -101,7 +106,7 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.CompareTag("Deadly"))
         {
             GameOver();
-        }
+        } else WinGameOver();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -168,11 +173,16 @@ public class PlayerController : MonoBehaviour
 
     void GameOver()
     {
-        engineOnAudio.Pause();
-        engineOffAudio.Pause();
-        engineCrashAudio.Play();
+        engineOffAudio.pitch = 0.8f;
         rocketCrashAudio.Play();
         gameOver = true;
         gameManager.ShowGameOverText();
+    }
+
+    void WinGameOver()
+    {
+        engineOffAudio.pitch = 0.8f;
+        gameManager.ShowVictoryScreen();
+        gameOver = true;
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -14,6 +15,8 @@ public class GameManager : MonoBehaviour
 
     public TextMeshProUGUI speedText;
 
+    public GameObject victoryTexts;
+    public TextMeshProUGUI victorySpeedText;
     public TextMeshProUGUI gameOverText;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -36,13 +39,19 @@ public class GameManager : MonoBehaviour
 
     void UpdateSpeedText()
     {
-        float pSpeed = player.speed.y + playerRigidBody.linearVelocity.z;
+        float pSpeed = playerRigidBody.linearVelocity.z;
         speedText.text = "Speedometer: " + pSpeed;
     }
 
     public void ShowGameOverText()
     {
         gameOverText.gameObject.SetActive(true);
+    }
+
+    public void ShowVictoryScreen()
+    {
+        victorySpeedText.text = "Your top speed:" + Mathf.Floor(player.topSpeed) +  "LY/s";
+        victoryTexts.SetActive(true);
     }
     
 }

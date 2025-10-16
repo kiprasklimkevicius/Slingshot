@@ -9,6 +9,7 @@ TagManager:
   - Gravity
   - Deadly
   - Bouncy Wall
+  - Earth
   layers:
   - Default
   - TransparentFX
