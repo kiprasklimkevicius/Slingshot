@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class WallBounce : MonoBehaviour
 {
-    public float bounceSpeed = 1.3f;
+    private float bounceSpeed = 1.5f;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

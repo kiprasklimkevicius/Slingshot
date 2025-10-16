@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
 {
     private PlayerController player;
     private Rigidbody playerRigidBody;
-    
+    public bool gameWon;
     
     public RawImage fuelGaugeArrow;
     
@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     {
         player = GameObject.Find("Player").GetComponent<PlayerController>();
         playerRigidBody = GameObject.Find("Player").GetComponent<Rigidbody>();
+        gameWon = false;
     }
 
     // Update is called once per frame
@@ -34,6 +35,7 @@ public class GameManager : MonoBehaviour
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
+        if (gameWon && Input.GetKeyDown(KeyCode.Space)) SceneManager.LoadScene("Scenes/MainScene");
         UpdateSpeedText();
         float arrowRotation = Mathf.Lerp(120, 0, player.fuelGauge/100);
         fuelGaugeArrow.transform.rotation = Quaternion.Euler(Vector3.forward * arrowRotation);
@@ -55,6 +57,7 @@ public class GameManager : MonoBehaviour
     {
         victorySpeedText.text = "Your top speed:" + Mathf.Floor(player.topSpeed) +  "LY/s";
         victoryTexts.SetActive(true);
+        gameWon = true;
     }
     
 }
