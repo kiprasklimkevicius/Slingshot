@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
     public float initSpeed = 10;
     public Vector3 speed;
     public Vector3 lateralSpeed = new Vector3(5,0,0); // lateral speed
+    public float lateralSpeedInGravityField = 4;
     public GameObject projectile;
     private float xPosProjectileSpawn = 0.5f;
     public float powerUpFuel = 30;
@@ -14,12 +15,17 @@ public class PlayerController : MonoBehaviour
     public float gravityConstant = 0.1f;
     public bool gameOver;
     private GameManager gameManager;
-    private AudioSource laserShotAudio;
     public float xPull = 1.5f;
     public float fuelGauge;
     public float fuelDischargeRatePerSecond = 50;
     public float fuelSpeed = 10;
     private float timeSpentFueling = 0;
+    private AudioSource laserShotAudio;
+    private AudioSource engineOffAudio;
+    private AudioSource engineOnAudio;
+    private AudioSource engineCrashAudio;
+    private AudioSource rocketCrashAudio;
+    private AudioSource[] sounds;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -31,6 +37,14 @@ public class PlayerController : MonoBehaviour
         laserShotAudio = GetComponent<AudioSource>();
         fuelGauge = Mathf.Clamp(fuelGauge, 0, 100);
         fuelGauge = 50;
+        
+        sounds = GetComponents<AudioSource>();
+        // 0, 1, 2... is the order that these audio sources are assigned to the 'Player' Game Object
+        laserShotAudio = sounds[0];
+        engineOffAudio = sounds[1];
+        engineOnAudio = sounds[2];
+        engineCrashAudio = sounds[3];
+        rocketCrashAudio = sounds[4];
     }
 
     // Update is called once per frame
@@ -41,7 +55,10 @@ public class PlayerController : MonoBehaviour
         LateralMovement();
         
         if (Input.GetKeyDown(KeyCode.Space)) ShootProjectile();
-
+        
+        
+        if (Input.GetKeyDown(KeyCode.LeftShift)) SwitchToEngineOnAudio();
+        if (Input.GetKeyUp(KeyCode.LeftShift)) SwitchToEngineOffAudio();
         if (Input.GetKey(KeyCode.LeftShift)) UseFuel();
     }
 
@@ -61,6 +78,7 @@ public class PlayerController : MonoBehaviour
         if (fuelGauge > 0)
         {
             rigidBody.AddForce(Vector3.forward * fuelSpeed * Time.deltaTime, ForceMode.Force);
+            engineOffAudio.pitch += 0.5f * Time.deltaTime;
             fuelGauge -= fuelDischargeRatePerSecond * Time.deltaTime;
             timeSpentFueling += Time.deltaTime;
             Debug.Log("Time spent using Fuel: " + timeSpentFueling);
@@ -79,10 +97,10 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
+        if (gameOver) return;
         if (other.gameObject.CompareTag("Deadly"))
         {
-            gameOver = true;
-            gameManager.ShowGameOverText();
+            GameOver();
         }
     }
 
@@ -90,13 +108,13 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("SpeedUp"))
         {
+            //Destroy the power up and pick up fuel
             Destroy(other.gameObject);
-            //gain speed
             fuelGauge += powerUpFuel;
         }
         if (other.CompareTag("Gravity"))
         {
-            lateralSpeed.x = 2;
+            lateralSpeed.x -= lateralSpeedInGravityField;
         }
     }
     
@@ -105,7 +123,7 @@ public class PlayerController : MonoBehaviour
     {
         if (other.CompareTag("Gravity"))
         {
-            lateralSpeed.x = 5;
+            lateralSpeed.x += lateralSpeedInGravityField;
         }
     }
 
@@ -133,5 +151,28 @@ public class PlayerController : MonoBehaviour
         Rigidbody rb = obj.GetComponentInParent<Rigidbody>();
         rb.mass = blackHoleMass;
         return rb.mass;
+    }
+    
+    void SwitchToEngineOnAudio()
+    {
+        //engineOffAudio.pitch = 1.5f;
+        // engineOnAudio.Play();
+    }
+
+    void SwitchToEngineOffAudio()
+    {
+        engineOffAudio.pitch = 1;
+        // engineOnAudio.Pause();
+        // engineOffAudio.Play();
+    }
+
+    void GameOver()
+    {
+        engineOnAudio.Pause();
+        engineOffAudio.Pause();
+        engineCrashAudio.Play();
+        rocketCrashAudio.Play();
+        gameOver = true;
+        gameManager.ShowGameOverText();
     }
 }
