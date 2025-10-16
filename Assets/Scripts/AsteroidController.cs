@@ -11,6 +11,7 @@ public class AsteroidController : MonoBehaviour
     private float timeToMove = 1.5f;
     private Vector3 initSpeed = new Vector3(10, 0, -2);
     private Rigidbody rb;
+    public GameObject smokeEffects;
     
     void Start()
     {
@@ -38,6 +39,7 @@ public class AsteroidController : MonoBehaviour
             Destroy(gameObject);
             Destroy(other.gameObject);
             Instantiate(powerUp, transform.position, powerUp.transform.rotation);
+            Instantiate(smokeEffects, transform.position, smokeEffects.transform.rotation);
         }
     }
 

@@ -123,6 +123,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powerUp: {fileID: 7888557349061357719, guid: c7b29929ab0484277b3ee97681d86b6f, type: 3}
+  smokeEffects: {fileID: 4602589558587072097, guid: bad663d8967554b08bea01767dbe7e4e, type: 3}
 --- !u!54 &2322444906739818333
 Rigidbody:
   m_ObjectHideFlags: 0

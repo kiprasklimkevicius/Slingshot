@@ -86,7 +86,6 @@ public class PlayerController : MonoBehaviour
             engineOffAudio.pitch += 0.5f * Time.deltaTime;
             fuelGauge -= fuelDischargeRatePerSecond * Time.deltaTime;
             timeSpentFueling += Time.deltaTime;
-            Debug.Log("Time spent using Fuel: " + timeSpentFueling);
         }
 
     }
