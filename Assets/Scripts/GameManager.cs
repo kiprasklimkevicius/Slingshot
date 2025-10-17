@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,6 +20,8 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI victorySpeedText;
     public TextMeshProUGUI gameOverText;
 
+    public GameObject asteroid;
+
     public TextMeshProUGUI speedOnImpactText;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -26,6 +29,8 @@ public class GameManager : MonoBehaviour
         player = GameObject.Find("Player").GetComponent<PlayerController>();
         playerRigidBody = GameObject.Find("Player").GetComponent<Rigidbody>();
         gameWon = false;
+        // TODO: only if this is the main scene
+        SpawnAsteroids(60);
     }
 
     // Update is called once per frame
@@ -58,6 +63,24 @@ public class GameManager : MonoBehaviour
         victorySpeedText.text = "Your top speed:" + Mathf.Floor(player.topSpeed) +  "LY/s";
         victoryTexts.SetActive(true);
         gameWon = true;
+    }
+
+    private void SpawnAsteroids(int numberToBeSpawned)
+    {
+        // zpos of the first asteroid
+        float zPos = 24;
+        for (int i = 0; i < numberToBeSpawned; i++)
+        {
+            Instantiate(asteroid, new Vector3(0, 0, zPos + i * 10), Quaternion.Euler(RandomRotationVector()));
+        }
+    }
+
+    private Vector3 RandomRotationVector()
+    {
+        float x = Random.Range(0.0f, 360.0f);
+        float y = Random.Range(0.0f, 360.0f);
+        float z = Random.Range(0.0f, 360.0f);
+        return new Vector3(x, y, z);
     }
     
 }

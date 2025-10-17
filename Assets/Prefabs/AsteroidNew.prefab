@@ -95,7 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2c8808dcc2114da69ed82cdd06837f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  powerUp: {fileID: 919132149155446097, guid: 260fa001b1efa8a47aae01e9ec412837, type: 3}
+  powerUp: {fileID: 7888557349061357719, guid: c7b29929ab0484277b3ee97681d86b6f, type: 3}
   smokeEffects: {fileID: 4602589558587072097, guid: bad663d8967554b08bea01767dbe7e4e, type: 3}
 --- !u!1001 &7343162527352189480
 PrefabInstance:
