@@ -21,7 +21,7 @@ public class GravityController : MonoBehaviour
     
     private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Deadly")) return;
+        if (other.CompareTag("Deadly") || other.CompareTag("SpeedUp")) return;
         
         Debug.Log("OnTriggerStayInBlackHOle");
         Rigidbody otherRb = other.GetComponent<Rigidbody>();
@@ -32,8 +32,8 @@ public class GravityController : MonoBehaviour
     {
         Vector3 vectorToObject = (transform.position - otherObject.transform.position);
         float distance = vectorToObject.magnitude;
-        
-        float forceIntensity = gravityConstant * blackHoleMass / (distance);
+        // 1/rigidBody.mass so that the less mass the other object has, the more it is affected AND vice versa 
+        float forceIntensity = gravityConstant * blackHoleMass * (1/rigidBody.mass) / (distance);
         
         Vector3 forceToApply = vectorToObject.normalized * forceIntensity;
         forceToApply.x *= xPull; // Test maybe feels better 
