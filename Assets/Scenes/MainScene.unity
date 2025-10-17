@@ -268,7 +268,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &92330220
 Transform:
   m_ObjectHideFlags: 0
@@ -282,7 +282,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 453385125}
   - {fileID: 67616333}
   - {fileID: 1438428841}
   - {fileID: 1374095779}
@@ -2210,11 +2209,6 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 1922361866523201146, guid: e0ef6fba1dbfc4e959d5d7cf05f5d2af, type: 3}
   m_PrefabInstance: {fileID: 1549368690}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &453385125 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1922361866523201146, guid: e0ef6fba1dbfc4e959d5d7cf05f5d2af, type: 3}
-  m_PrefabInstance: {fileID: 6194667022316817242}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &491392140 stripped
 Transform:
@@ -6453,8 +6447,6 @@ MonoBehaviour:
   topSpeed: 0
   projectile: {fileID: 6438686603937659065, guid: 919d1e4173fe0430084bbba39654e686, type: 3}
   powerUpFuel: 30
-  blackHoleMass: 50000
-  gravityConstant: 0.1
   gameOver: 0
   xPull: 1.5
   fuelGauge: 0
@@ -7637,19 +7629,19 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 92330220}
+    m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1922361866523201146, guid: e0ef6fba1dbfc4e959d5d7cf05f5d2af, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -10.274701
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1922361866523201146, guid: e0ef6fba1dbfc4e959d5d7cf05f5d2af, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 55.321705
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1922361866523201146, guid: e0ef6fba1dbfc4e959d5d7cf05f5d2af, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -60.732903
+      value: 23.597366
       objectReference: {fileID: 0}
     - target: {fileID: 1922361866523201146, guid: e0ef6fba1dbfc4e959d5d7cf05f5d2af, type: 3}
       propertyPath: m_LocalRotation.w
@@ -7682,6 +7674,10 @@ PrefabInstance:
     - target: {fileID: 2530800575435908718, guid: e0ef6fba1dbfc4e959d5d7cf05f5d2af, type: 3}
       propertyPath: m_Name
       value: Asteroid
+      objectReference: {fileID: 0}
+    - target: {fileID: 2530800575435908718, guid: e0ef6fba1dbfc4e959d5d7cf05f5d2af, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7760,6 +7756,7 @@ SceneRoots:
   - {fileID: 652147605}
   - {fileID: 2118203054}
   - {fileID: 1674048494}
+  - {fileID: 6194667022316817242}
   - {fileID: 92330220}
   - {fileID: 538905308}
   - {fileID: 1822728787}

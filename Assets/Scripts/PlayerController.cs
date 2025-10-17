@@ -10,9 +10,7 @@ public class PlayerController : MonoBehaviour
     public GameObject projectile;
     private float xPosProjectileSpawn = 0.5f;
     public float powerUpFuel = 30;
-    public float blackHoleMass = 20;
     private Rigidbody rigidBody;
-    public float gravityConstant = 0.1f;
     public bool gameOver;
     private GameManager gameManager;
     public float xPull = 1.5f;
@@ -140,31 +138,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.CompareTag("Gravity"))
-        {
-            GravityPull(other.gameObject);
-        }
-    }
-
-    void GravityPull(GameObject gravity)
-    {
-        Vector3 vectorToObject = (gravity.transform.position - transform.position);
-        float distance = vectorToObject.magnitude;
-        
-        float forceIntensity = gravityConstant * GetObjectMass(gravity) / (distance);
-        Vector3 forceToApply = vectorToObject.normalized * forceIntensity;
-        forceToApply.x *= xPull; // Test maybe feels better 
-        rigidBody.AddForce(forceToApply * Time.deltaTime, ForceMode.Force);
-    }
-    
-    float GetObjectMass(GameObject obj)
-    {
-        Rigidbody rb = obj.GetComponentInParent<Rigidbody>();
-        rb.mass = blackHoleMass;
-        return rb.mass;
-    }
 
     void SwitchToEngineOffAudio()
     {
