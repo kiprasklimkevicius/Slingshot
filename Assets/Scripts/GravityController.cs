@@ -23,7 +23,6 @@ public class GravityController : MonoBehaviour
     {
         if (other.CompareTag("Deadly") || other.CompareTag("SpeedUp")) return;
         
-        Debug.Log("OnTriggerStayInBlackHOle");
         Rigidbody otherRb = other.GetComponent<Rigidbody>();
         GravityPull(other.gameObject, otherRb);
     }
