@@ -21,10 +21,7 @@ public class LaserShot : MonoBehaviour
     void Update()
     {
         if (transform.position.z - spawnLocation >50) Destroy(gameObject);
-        Vector3 velocityVector = rb.linearVelocity.normalized;
-        // switching the z and y is important for transform.LookAt because the capsule is rotated 90degrees around x-axis
-        velocityVector = new Vector3(velocityVector.x, velocityVector.z, velocityVector.y);
-        transform.LookAt(transform.position + velocityVector);
+       
     }
     
     
