@@ -21,9 +21,14 @@ public class PlayerController : MonoBehaviour
     private AudioSource laserShotAudio;
     private AudioSource engineOffAudio;
     private AudioSource rocketCrashAudio;
+    private AudioSource fuelUpAudio;
     private AudioSource[] sounds;
     private float speedOnLastFrame;
     private float timeKeeperForLastFrame;
+    private float negativeXRange;
+    private float positiveXRange;
+    
+    
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -43,6 +48,10 @@ public class PlayerController : MonoBehaviour
         laserShotAudio = sounds[0];
         engineOffAudio = sounds[1];
         rocketCrashAudio = sounds[2];
+        fuelUpAudio = sounds[3];
+        
+        negativeXRange = GameObject.Find("Wall-Left").transform.position.x;
+        positiveXRange = GameObject.Find("Wall-Right").transform.position.x;
     }
 
     // Update is called once per frame
@@ -59,6 +68,11 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftShift)) UseFuel();
 
         if (rigidBody.linearVelocity.z > topSpeed) topSpeed = rigidBody.linearVelocity.z;
+        if (transform.position.x > positiveXRange || transform.position.x < negativeXRange)
+        {
+            Debug.Log(Mathf.Sign(transform.position.x));
+            transform.position += new Vector3((-Mathf.Sign(transform.position.x))*2,0,0); 
+        } 
 
     }
 
@@ -112,7 +126,7 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.CompareTag("Deadly"))
         {
             GameOver();
-        } else WinGameOver();
+        } if (other.gameObject.CompareTag("Earth")) WinGameOver();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -122,6 +136,7 @@ public class PlayerController : MonoBehaviour
             //Destroy the power up and pick up fuel
             Destroy(other.gameObject);
             fuelGauge += powerUpFuel;
+            fuelUpAudio.Play();
         }
         if (other.CompareTag("Gravity"))
         {
