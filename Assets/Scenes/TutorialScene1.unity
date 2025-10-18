@@ -3205,7 +3205,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1895586763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3312,7 +3312,7 @@ GameObject:
   - component: {fileID: 1900407194}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4172,6 +4172,9 @@ MonoBehaviour:
   gameOverText: {fileID: 1956456942}
   asteroid: {fileID: 0}
   speedOnImpactText: {fileID: 1590355625}
+  startGame: 0
+  startGameUI: {fileID: 0}
+  FuelGaugeUI: {fileID: 0}
 --- !u!1 &2074420125
 GameObject:
   m_ObjectHideFlags: 0

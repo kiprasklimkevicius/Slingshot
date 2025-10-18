@@ -3296,7 +3296,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &974743555
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6334,7 +6334,7 @@ GameObject:
   - component: {fileID: 1900407194}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7300,6 +7300,9 @@ MonoBehaviour:
   gameOverText: {fileID: 361428786}
   asteroid: {fileID: 6491806632900897575, guid: dc76f787ca4b548ee87e09a692d7658b, type: 3}
   speedOnImpactText: {fileID: 111340620}
+  startGame: 0
+  startGameUI: {fileID: 0}
+  FuelGaugeUI: {fileID: 0}
 --- !u!4 &1994950902 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1922361866523201146, guid: e0ef6fba1dbfc4e959d5d7cf05f5d2af, type: 3}
