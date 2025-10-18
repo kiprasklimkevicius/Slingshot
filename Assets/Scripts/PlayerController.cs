@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         laserShotAudio = GetComponent<AudioSource>();
         fuelGauge = Mathf.Clamp(fuelGauge, 0, 100);
-        fuelGauge = 50;
+        fuelGauge = fuelGauge;
 
         topSpeed = 0;
         
@@ -58,6 +58,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         if (gameOver) return;
+        if (gameManager.gamePaused) return;
         
         LateralMovement();
         
@@ -87,15 +88,19 @@ public class PlayerController : MonoBehaviour
         
     }
 
-    void LateralMovement()
+    public bool LateralMovement()
     {
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             rigidBody.AddForce(lateralSpeed, ForceMode.Impulse);
+            return true;
         } if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             rigidBody.AddForce(-lateralSpeed, ForceMode.Impulse);
+            return true;
         }
+
+        return false;
     }
 
     void UseFuel()
@@ -112,7 +117,7 @@ public class PlayerController : MonoBehaviour
     }
     
 
-    void ShootProjectile()
+    public void ShootProjectile()
     {
         if (xPosProjectileSpawn == 0.5f) xPosProjectileSpawn--;
         else xPosProjectileSpawn++;
@@ -157,6 +162,16 @@ public class PlayerController : MonoBehaviour
     void SwitchToEngineOffAudio()
     {
         engineOffAudio.pitch = 1;
+    }
+
+    public void PauseSounds()
+    {
+        engineOffAudio.Pause();
+    }
+
+    public void ResumeSounds()
+    {
+        engineOffAudio.Play();
     }
 
     void GameOver()

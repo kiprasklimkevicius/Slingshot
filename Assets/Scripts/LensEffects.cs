@@ -29,7 +29,6 @@ public class LensEffects : MonoBehaviour
     void Start()
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        Debug.Log("startGame is active - From LensEffects.cs");
         if (!gameManager.startGame) return;
         GameObject.FindWithTag("Player").TryGetComponent <Rigidbody>(out player);
         volume.profile.TryGet<LensDistortion>(out lensDistortion);

@@ -31,6 +31,12 @@ public class GameManager : MonoBehaviour
     public bool startGame;
     public GameObject startGameUI;
     public GameObject FuelGaugeUI;
+    public bool gamePaused;
+
+    public GameObject tutorial1;
+    public GameObject tutorial2;
+    public GameObject tutorial3;
+    public GameObject tutorial4;
 
     public float trackLength = 600;
     private void Awake()
@@ -41,6 +47,7 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
             startGame = false;
             difficulty = 0;
+            gamePaused = false;
         } else Destroy(gameObject);
         
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -60,7 +67,6 @@ public class GameManager : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        Debug.Log("OnSceneLoad GameManager");
         InitializeCanvas(scene.name);
         if (!startGame) return;
         
@@ -74,7 +80,6 @@ public class GameManager : MonoBehaviour
 
     void InitializeCanvas(string sceneName)
     {
-        Debug.Log("Scene name: " + sceneName);
         if (sceneName.Equals("StartingScene")) {
             startGameUI.SetActive(true);
             speedText.gameObject.SetActive(false);
@@ -119,6 +124,13 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         if (!startGame) return;
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (!gamePaused) PauseGame();
+            if (gamePaused) ResumeGame();
+        }
+        
+        if (gamePaused) return;
         if (Input.GetKeyDown(KeyCode.R))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
@@ -134,6 +146,20 @@ public class GameManager : MonoBehaviour
         fuelGaugeArrow.transform.rotation = Quaternion.Euler(Vector3.forward * arrowRotation);
     }
 
+    public void PauseGame()
+    {
+            Time.timeScale = 0;
+            gamePaused = true;
+            player.PauseSounds();
+    }
+
+    public void ResumeGame()
+    {
+        Time.timeScale = 1;
+        gamePaused = false;
+        player.ResumeSounds();
+    }
+    
     void UpdateSpeedText()
     {
         float pSpeed = playerRigidBody.linearVelocity.z;
@@ -163,6 +189,29 @@ public class GameManager : MonoBehaviour
             // 600 is the distance from start to finish
             // TODO: change magic number to what it should be^^^
             Instantiate(asteroid, new Vector3(0, 0, zPos + i * spacingBetweenObjects), Quaternion.Euler(RandomRotationVector()));
+        }
+    }
+
+    public void ShowTutorial(int tutorial, bool active)
+    {
+        Debug.Log("Show tutorial " + tutorial + " " + active);
+        switch (tutorial)
+        {
+            case 1:
+                tutorial1.SetActive(active);
+                break;
+            case 2:
+                tutorial2.SetActive(active);
+                break;
+            case 3: 
+                tutorial3.SetActive(active);
+                break;
+            case 4:
+                tutorial4.SetActive(active);
+                break;
+            default:
+                Debug.Log("missed case");
+                break;
         }
     }
     
