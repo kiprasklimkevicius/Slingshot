@@ -21,7 +21,7 @@ public class GravityController : MonoBehaviour
     
     private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Deadly") || other.CompareTag("SpeedUp")) return;
+        if (other.CompareTag("Deadly") || other.CompareTag("SpeedUp") || other.CompareTag("Bouncy Wall")) return;
         
         Rigidbody otherRb = other.GetComponent<Rigidbody>();
         GravityPull(other.gameObject, otherRb);

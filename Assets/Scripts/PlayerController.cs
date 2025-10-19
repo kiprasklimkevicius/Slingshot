@@ -181,6 +181,13 @@ public class PlayerController : MonoBehaviour
         gameOver = true;
         gameManager.ShowGameOverText(Mathf.Floor(speedOnLastFrame));
     }
+    
+    public void GameOverTimeReasons()
+    {
+        engineOffAudio.pitch = 0.8f;
+        gameOver = true;
+        gameManager.ShowGameOverTimeReasonsText(Mathf.Floor(speedOnLastFrame));
+    }
 
     void WinGameOver()
     {

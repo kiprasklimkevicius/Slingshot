@@ -39,6 +39,11 @@ public class GameManager : MonoBehaviour
     public GameObject tutorial4;
 
     public float trackLength = 600;
+
+    public float timeToFinish;
+    private float timeLeftToFinish;
+    public TextMeshProUGUI timeText;
+    
     private void Awake()
     {
         if (instance == null)
@@ -76,18 +81,22 @@ public class GameManager : MonoBehaviour
         
         // TODO: only if this is the main scene
         if (difficulty  != 0) SpawnAsteroids(20 * difficulty);
+        timeLeftToFinish = timeToFinish - 30 * (difficulty-1) - 7;// SUPER MAGICAL NUMBERS
     }
 
     void InitializeCanvas(string sceneName)
     {
         if (sceneName.Equals("StartingScene")) {
             startGameUI.SetActive(true);
+            timeText.gameObject.SetActive(false);
             speedText.gameObject.SetActive(false);
             FuelGaugeUI.SetActive(false);
             gameOverText.gameObject.SetActive(false);
             victoryTexts.SetActive(false);
-        } else {
+        } else
+        {
             startGameUI.SetActive(false);
+            timeText.gameObject.SetActive(true);
             speedText.gameObject.SetActive(true);
             FuelGaugeUI.SetActive(true);
             gameOverText.gameObject.SetActive(false);
@@ -142,6 +151,9 @@ public class GameManager : MonoBehaviour
             SceneManager.LoadScene("Scenes/StartingScene");
         }
         UpdateSpeedText();
+        if (timeLeftToFinish <= 0) player.GameOverTimeReasons();
+        else if (!player.gameOver) UpdateTimeText();
+        
         float arrowRotation = Mathf.Lerp(120, 0, player.fuelGauge/100);
         fuelGaugeArrow.transform.rotation = Quaternion.Euler(Vector3.forward * arrowRotation);
     }
@@ -165,10 +177,21 @@ public class GameManager : MonoBehaviour
         float pSpeed = playerRigidBody.linearVelocity.z;
         speedText.text = "Speedometer: " + pSpeed;
     }
+    
+    void UpdateTimeText()
+    {
+        timeLeftToFinish -= Time.deltaTime;
+        timeText.text = "Time Left: " + timeLeftToFinish + "s";
+    }
 
     public void ShowGameOverText(float speedOnImpact)
     {
         speedOnImpactText.text = "Your Speed on Impact: " +speedOnImpact;
+        gameOverText.gameObject.SetActive(true);
+    }
+    public void ShowGameOverTimeReasonsText(float speedOnImpact)
+    {
+        speedOnImpactText.text = "Time has ran out, the aliens probably already took over earth";
         gameOverText.gameObject.SetActive(true);
     }
 
