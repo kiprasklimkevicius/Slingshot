@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -45,7 +46,7 @@ public class LensEffects : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!gameManager.startGame) return;
+        if (!gameManager.startGame || player.IsUnityNull()) return;
         // converting players speed into lens distortion
         float playerSpeed = player.linearVelocity.z;
         float t = playerSpeed / 50;

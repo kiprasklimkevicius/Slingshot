@@ -13,16 +13,19 @@ public class AsteroidController : MonoBehaviour
     private Rigidbody rb;
     public GameObject smokeEffects;
     public bool tutorialAsteroid; // TODO: This is not proper but works I do quick changes later maybe I fix.
+    private Transform visualPart;
+    private Vector3 rotation;
     
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        rb.AddTorque(RandomTorque(), ForceMode.Impulse);
+        // rb.AddTorque(RandomTorque(), ForceMode.Impulse);
         if (tutorialAsteroid) return;
         int randomSign = Random.Range(0, 2) * 2 - 1;
         initSpeed.x *= randomSign;
         rb.AddForce(initSpeed, ForceMode.Impulse);
-        rb.AddTorque(RandomTorque(), ForceMode.Impulse);
+        visualPart = transform.GetChild(0);
+        rotation = RandomTorque();
         float negativeXRange = GameObject.Find("Wall-Left").transform.position.x + 3;
         float positiveXRange = GameObject.Find("Wall-Right").transform.position.x - 3;
         transform.position = new Vector3(Random.Range(negativeXRange, positiveXRange), 
@@ -32,14 +35,14 @@ public class AsteroidController : MonoBehaviour
 
     private Vector3 RandomTorque()
     {
-        Vector3 result = new Vector3(Random.Range(0f,360f), Random.Range(0f,360f), Random.Range(0f,360f));
+        Vector3 result = new Vector3(Random.Range(0f,100f), Random.Range(0f,100f), Random.Range(0f,100f));
         return result;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        visualPart.Rotate(rotation * Time.deltaTime);
     }
 
     private void OnTriggerEnter(Collider other)
